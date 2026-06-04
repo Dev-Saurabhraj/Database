@@ -80,15 +80,17 @@ RedisCommandHandler::RedisCommandHandler(){
 std::string RedisCommandHandler::processCommand(const std::string &commandLine){
     // use RESP parser 
     auto tokens = parseRespCommand(commandLine);
+
+
     if(tokens.empty()) return "-Error: Empty command\r\n";
     std::string cmd = tokens[0];
+
+
     std::transform(cmd.begin(), cmd.end(), cmd.begin(), :: toupper);
 
     std::ostringstream response;
 
     // connect to database
-
-    // check command
 
     return response.str();
 }
