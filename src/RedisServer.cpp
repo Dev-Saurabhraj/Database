@@ -1,6 +1,8 @@
 
-#include "include/RedisServer.h"
+#include "RedisServer.h"
 #include <iostream>
+#include "RedisCommandHandler.h"
+
 //for linux
 #include <sys/socket.h> //(this is the socket library);
 #include <netinet/in.h>
@@ -9,13 +11,14 @@
 // #include <ws2tcpip.h>//*
 
 #include <unistd.h>
+#include <vector>
+#include <thread>
+#include <cstring>
 
 static RedisServer* globalServer = nullptr;
 
 RedisServer::RedisServer(int port) : port(port), server_socket(-1), running(true){
     globalServer = this;
-
-
 }
 
 void RedisServer::shutdown(){
@@ -23,7 +26,7 @@ void RedisServer::shutdown(){
 
     if(server_socket !=-1){
         close(server_socket);
-        std::cout<<"sever shoutdown Complete\n";
+        std::cout<<"server shoutdown Complete\n";
     }
 }
 
@@ -64,4 +67,38 @@ void RedisServer::run(){
     }
 
     std::cout<<"Redis Server is running on Port"<<port<<"\n";
+
+    std::vector<std::thread> threads;
+    RedisCommandHandler cmdHandler;
+
+    while(running){
+        int client_socket = accept(server_socket, nullptr, nullptr); 
+        if(client_socket <0){
+            if(running){
+                std::cerr<<"Error Accepting client Connectoin\n";
+            }
+            continue;
+        }
+
+        threads.emplace_back([client_socket, &cmdHandler](){
+            char buffer[1024];
+            while(true){
+                memset(buffer, 0, sizeof(buffer));
+                int bytes = recv(client_socket, buffer, sizeof(buffer)-1, 0);
+                if(bytes <=0) break;
+                std::string request(buffer, bytes);
+                std::string response = cmdHandler.processCommand(request);
+                send(client_socket, response.c_str(), response.size(), 0);
+            }
+            close(client_socket);
+
+        });
+	    
+	    
+    }
+
+    for(auto & t : threads){
+        if(t.joinable()) t.join();
+    }
+    //shut down;
 }

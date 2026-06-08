@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/RedisServer.h"
+#include "RedisServer.h"
 #include <thread>
 #include<chrono>
 
@@ -16,6 +16,7 @@ int main(int argc , char* argv[]) {
     });
 
     persistanceThread.detach();
+    server.run();
 
     return 0;
 }

@@ -1,11 +1,8 @@
-#include <include/RedisCommandHandler.h>
+#include "RedisCommandHandler.h"
 #include<vector>
 #include<sstream>
 #include<algorithm>
 #include<string>
-
-
-
 
 
 //RESP - redis seriallization protocol 
@@ -34,8 +31,6 @@ std::vector<std::string> parseRespCommand(const std::string &input){
         
         return tokens;
     }
-
-
 
     // *2\r\n&4\r\n\PING\r\n&4\r\n\TEST\r\n
     size_t pos = 0;
@@ -82,7 +77,7 @@ std::string RedisCommandHandler::processCommand(const std::string &commandLine){
     auto tokens = parseRespCommand(commandLine);
 
 
-    if(tokens.empty()) return "-Error: Empty command\r\n";
+    if(tokens.empty()) return "Error: Empty command\r\n";
     std::string cmd = tokens[0];
 
 
