@@ -3,7 +3,6 @@
 #include <iostream>
 #include "RedisCommandHandler.h"
 #include "../include/RedisDatabase.h"
-
 //for linux
 #include <sys/socket.h> //(this is the socket library);
 #include <netinet/in.h>
@@ -22,7 +21,7 @@ static RedisServer* globalServer = nullptr;
 
 void singalHandler(int signum){
     if(globalServer){
-        std::cout<<"Caught singal "<<signum<<", shutting donw...\n";
+        std::cout<<"Caught signal "<<signum<<", shutting down...\n";
         globalServer->shutdown();
     }
     exit(signum);

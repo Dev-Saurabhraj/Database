@@ -1,6 +1,7 @@
 #ifndef REDIS_DATABASE_H
 #define REDIS_DATABASE_H
 #include<string>
+#include<unordered_map>
 
 
 class RedisDatabase{
@@ -17,6 +18,11 @@ private:
 
     RedisDatabase(const RedisDatabase&) = delete;
     RedisDatabase& operator = (const RedisDatabase&) = delete;
+
+    std::mutex db_mutex;
+    std::unordered_map<std::string, std::string> kv_store;
+    std::unordered_map<std::string, std::string> list_store;
+    std::unordered_map<std::string, std::string> hash_store;
 
 
 };
