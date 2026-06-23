@@ -73,6 +73,8 @@ RedisCommandHandler::RedisCommandHandler(){
 
 }
 
+
+
 std::string RedisCommandHandler::processCommand(const std::string &commandLine){
     // use RESP parser 
     auto tokens = parseRespCommand(commandLine);
@@ -83,7 +85,7 @@ std::string RedisCommandHandler::processCommand(const std::string &commandLine){
 
 
     std::transform(cmd.begin(), cmd.end(), cmd.begin(), :: toupper);
-
+ 
     std::ostringstream response;
 
     // connect to database
@@ -142,12 +144,28 @@ std::string RedisCommandHandler::processCommand(const std::string &commandLine){
         }else{
             bool res = db.del(tokens[1]);
             response <<":"<<(res?1:0)<<"\r\n";
-            
         }
 
+    }else if(cmd=="EXPIRE"){
+        if(tokens.size()<3){
+            response<<"-Error : EXPIRE requires key and time in seconds\r\n";
+        }else{
+            int seconds = std::stoi(tokens[2]);
+            if(db.expire(tokens[1], seconds))
+                response<<"+OK\r\n";
+        }
+
+    }else if(cmd=="RENAME"){
+
+         if(tokens.size()<3){
+            response<<"-Error : RENAME requires old key and new key \r\n";
+        }else{
+            if(db.rename(tokens[1], tokens[2]))
+                response<<"+OK\r\n";
+        }
     }
     else{
-        response << "-Error: Unknow command\r\n";
+        response << "-Error: Unknown command\r\n";
     }
     //key/value operations commands
     // List Operation commands handling
