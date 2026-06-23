@@ -3,11 +3,20 @@
 #include<string>
 #include<unordered_map>
 #include<vector>
+#include<mutex>
 
 
 class RedisDatabase{
 public:
     static RedisDatabase& getInstance();
+
+    bool flushAll();
+    void set(const std::string key, const std::string value);
+    bool get(const std::string key, const std::string value);
+    std::vector<std::string> keys();
+    std::string type(const std::string& key);
+    bool del(const std::string &key);
+
 
     //Persistance : Dump 'load the database from a file;
     bool dump(const std::string& filename);
