@@ -6,12 +6,7 @@
 class RedisCommandHandler {
 public:
     RedisCommandHandler();
-
     std::string processCommand(const std::string &commandLine);
-
-    
-
 };
-
 
 #endif
