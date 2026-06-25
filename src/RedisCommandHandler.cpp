@@ -252,6 +252,12 @@ static std::string handleHset(const std::vector<std::string> & tokens, RedisData
 static std::string handleHget(const std::vector<std::string> & tokens, RedisDatabase& db){
     if(tokens.size()< 3)
         return "-Error : HGET requires key and field \r\n";
+        std::string value;
+        if(db.hget(tokens[1], tokens[2] , value)){
+            return "$" + std::to_string(value.size()) + "\r\n" + value + "\r\n";
+
+        }
+        return "$-1\r\n";
 }
 static std::string handleHdel(const std::vector<std::string> & tokens, RedisDatabase& db){
     if(tokens.size()< 3)
@@ -296,9 +302,8 @@ std::string RedisCommandHandler::processCommand(const std::string &commandLine){
     RedisDatabase& db = RedisDatabase::getInstance();
 
     //check commands
-
     //check ping;
-
+    
     if(cmd=="PING"){
         return handlePing(tokens, db);
     }

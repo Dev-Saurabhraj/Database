@@ -302,3 +302,41 @@ bool RedisDatabase::load(const std::string& filename){
         lst[index] = value;
             return true;
     }
+
+    
+    bool  RedisDatabase::hset(const std::string&key, const std::string & field, const std::string &value){
+
+        
+    }
+    bool  RedisDatabase::hget(const std::string&key, const std::string & field, const std::string &value){
+
+        
+    }
+    bool  RedisDatabase::hexist(const std::string&key, const std::string & field){
+
+        
+    }
+    bool  RedisDatabase::hdel(const std::string&key, const std::string & field){
+
+        
+    }
+    std::unordered_map<std::string, std::string>  RedisDatabase::hgetall(const std::string &key){
+
+        
+    }
+    std::vector<std::string>  RedisDatabase::hkeys(const std::string &key){
+
+        
+    }
+    std::vector<std::string>  RedisDatabase::hvals(const std::string &key){
+
+        
+    }
+    ssize_t  RedisDatabase::hlen(const std::string &key){
+
+        
+    }
+    bool  RedisDatabase::hmset(const std::string &key, std::vector<std::pair<std::string, std::string>> & field){
+
+        
+    }
