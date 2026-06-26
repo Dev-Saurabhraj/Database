@@ -33,7 +33,7 @@ public:
     //hash operation function defination
 
     bool hset(const std::string&key, const std::string & field, const std::string &value);
-    bool hget(const std::string&key, const std::string & field, const std::string &value);
+    bool hget(const std::string&key, const std::string & field, std::string &value);
     bool hexist(const std::string&key, const std::string & field);
     bool hdel(const std::string&key, const std::string & field);
     std::unordered_map<std::string, std::string> hgetall(const std::string &key);
