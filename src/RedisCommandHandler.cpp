@@ -17,26 +17,20 @@
 std::vector<std::string> parseRespCommand(const std::string &input){
     std::vector<std::string> tokens;
     if(input.empty()) return tokens;
-
-
     // if it will not start whith * then we will check wheather it will start with whitespace 
     // then we will fallback to whitespacc handler
-
     //white space handler;
     if(input[0] !='*'){
         std::istringstream iss(input);
         std::string token;
         while(iss>>token)
             tokens.push_back(token);
-        
         return tokens;
     }
 
     // *2\r\n&4\r\n\PING\r\n&4\r\n\TEST\r\n
     size_t pos = 0;
-
     if(input[pos]!='*')return tokens;
-
     pos++; // skip the *
 
     // crlf = Carriage Return(\r) , Line Feed (\n);
@@ -64,16 +58,16 @@ std::vector<std::string> parseRespCommand(const std::string &input){
         tokens.push_back(token);
         pos+=len+2; // skip token and CRLF;
      }
-
     return tokens;
 }
 
 RedisCommandHandler::RedisCommandHandler(){
 
 }
+
 static std::string handlePing(const std::vector<std::string>& tokens , RedisDatabase& db){
     return "+PONG\r\n";
-}
+} 
 
 static std::string handleEcho(const std::vector<std::string>& tokens , RedisDatabase& db){
     if(tokens.size()<2)
@@ -126,6 +120,7 @@ static std::string handleRename(const std::vector<std::string>& tokens , RedisDa
                 return "+OK\r\n";
         }
 }
+
 static std::string handleExpire(const std::vector<std::string>& tokens , RedisDatabase& db){
     if(tokens.size()<3){
             return "-Error : EXPIRE requires key and time in seconds\r\n";
